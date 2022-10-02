@@ -11,7 +11,8 @@ and then use command in your terminal
 classify-fle
 ```
 
-and you can also use ```bash
+and you can also use
+```bash
 classify-file --default / -D
 ```
 
