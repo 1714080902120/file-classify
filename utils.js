@@ -1,8 +1,10 @@
 import { lstatSync } from "fs";
 
 const IMG_TYPE = /\.(png|svg|jpg|jpeg|webp|gif)$/gi;
-const IGNORE = /\.git|node_modules|package.json|package-lock.json|yarn.lock|__DONE/gi;
+const IGNORE = /\.git|node_modules|__DONE/gi;
 const SUFFIX = /\.(.*)/gi;
+
+export const IGNORE_STR = '\.git|node_modules|__DONE';
 
 export function isImg(name) {
   return IMG_TYPE.test(name);

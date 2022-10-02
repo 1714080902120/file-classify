@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+
 import { Command } from 'commander';
 import { question } from '../lib/question.js';
 import { Classify } from '../index.js'
@@ -13,6 +14,7 @@ program.name('classify-file')
     let param = {
         baseDir: path,
         needJson: true,
+        ignores: '',
         saveDir: '../__DONE'
     }
 

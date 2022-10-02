@@ -1,4 +1,4 @@
-import { resolve, isAbsolute } from "path";
+import { resolve, isAbsolute, basename } from "path";
 import {
   writeFileSync,
   existsSync,
@@ -11,32 +11,42 @@ import {
 import {
   getRandomHash,
   getSuffix,
+  IGNORE_STR,
   isDir,
-  needIgnore,
 } from "./utils.js";
 
 import chalk from "chalk";
 
 export class Classify {
   constructor(options = {}) {
-    const { baseDir, needJson, saveDir } = options;
+    const { baseDir, needJson, saveDir, ignores } = options;
     // target file base path, use current project path in default
     this.baseDir = this.resolvePath(baseDir);
     // current dir path, will change when enter other dir
-    this.savePath = this.initSavePath(saveDir);
+    this.savePath = this.resolvePath(saveDir);
     // the target dir cur path
     this.targetDir = this.baseDir;
     // need create json file in every path
     this.needJson = needJson;
     // final json
     this.json = {};
+    // ignores
+    this.initIgnores(ignores);
+  }
+
+  initIgnores(ignores = "") {
+    ignores = ignores.trim();
+    this.ignore = new RegExp(
+      `${IGNORE_STR}${ignores.length > 0 ? "|" : ""}${ignores}`,
+      "i"
+    );
   }
 
   // start to run
   async run() {
     try {
       console.log(chalk.green("start classify"));
-    // create a dir in order to separate old and new
+      // create a dir in order to separate old and new
       await this.mkDir(this.savePath);
       await this.resetJSON(this.savePath);
       await this.classify(this.targetDir);
@@ -50,21 +60,15 @@ export class Classify {
     }
   }
 
-  initSavePath(path) {
-    return resolve(process.cwd(), path)
-  }
-
   async classify(curPath) {
     try {
       const res = readdirSync(curPath);
       for (let i = 0; i < res.length; i++) {
         const name = res[i];
         const path = resolve(curPath, name);
-        if (needIgnore(path)) {
+        if (this.needIgnore(path)) {
           continue;
-        }
-
-        if (isDir(path)) {
+        } else if (isDir(path)) {
           this.classify(path);
         } else {
           await this.copy(name, curPath);
@@ -143,10 +147,17 @@ export class Classify {
   }
 
   resolvePath(baseDir) {
+    const path = process.cwd();
     return !baseDir
-      ? process.cwd()
+      ? path
       : isAbsolute(baseDir)
       ? baseDir
-      : resolve(process.cwd(), baseDir);
+      : basename(path) === baseDir
+      ? path
+      : resolve(path, baseDir);
+  }
+
+  needIgnore (path) {
+    return this.ignore.test(path);
   }
 }

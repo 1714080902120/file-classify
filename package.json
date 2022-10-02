@@ -1,6 +1,6 @@
 {
   "name": "file-classify",
-  "version": "1.0.0",
+  "version": "1.0.4",
   "description": "a tool which can auto classify your file base on your file suffix. ant it will create a json file to all your file path",
   "main": "index.js",
   "bin": {
@@ -10,7 +10,10 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": ["tool", "file classify"],
+  "keywords": [
+    "tool",
+    "file classify"
+  ],
   "author": "",
   "license": "ISC",
   "repository": {
@@ -22,8 +25,8 @@
   },
   "homepage": "https://github.com/1714080902120/file-classify#readme",
   "engines": {
-    "npm" : ">=8.0.0",
-    "node" : ">=16.0.0"
+    "npm": ">=8.0.0",
+    "node": ">=16.0.0"
   },
   "dependencies": {
     "commander": "^9.4.1",
