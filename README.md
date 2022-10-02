@@ -8,7 +8,7 @@ npm install file-classify -g
 
 and then use command in your terminal
 ```bash
-classify-fle
+classify-file
 ```
 
 and you can also use
